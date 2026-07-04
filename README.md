@@ -1,22 +1,9 @@
-# yup-base64
+[![actions](https://github.com/yupsh/yup-base64/actions/workflows/actions.yml/badge.svg)](https://github.com/yupsh/yup-base64/actions/workflows/actions.yml)
+[![ci](https://github.com/yupsh/yup-base64/actions/workflows/ci.yml/badge.svg)](https://github.com/yupsh/yup-base64/actions/workflows/ci.yml)
+[![dockerfiles](https://github.com/yupsh/yup-base64/actions/workflows/dockerfiles.yml/badge.svg)](https://github.com/yupsh/yup-base64/actions/workflows/dockerfiles.yml)
+[![docs](https://github.com/yupsh/yup-base64/actions/workflows/docs.yml/badge.svg)](https://github.com/yupsh/yup-base64/actions/workflows/docs.yml)
+[![go](https://github.com/yupsh/yup-base64/actions/workflows/go.yml/badge.svg)](https://github.com/yupsh/yup-base64/actions/workflows/go.yml)
+[![release](https://github.com/yupsh/yup-base64/actions/workflows/release.yml/badge.svg)](https://github.com/yupsh/yup-base64/actions/workflows/release.yml)
+[![shell](https://github.com/yupsh/yup-base64/actions/workflows/shell.yml/badge.svg)](https://github.com/yupsh/yup-base64/actions/workflows/shell.yml)
 
-```
-NAME:
-   base64 - base64 encode/decode data and print on the standard output
-
-USAGE:
-   base64 [OPTION]... [FILE]
-
-   Base64 encode or decode FILE, or standard input, to standard output.
-   With no FILE, or when FILE is -, read standard input.
-
-VERSION:
-   dev
-
-GLOBAL OPTIONS:
-   --decode, -d          decode data
-   --ignore-garbage, -i  when decoding, ignore non-alphabet characters
-   --wrap int, -w int    wrap encoded lines after COLS character; use 0 to disable wrapping (default: 76)
-   --help, -h            show help
-   --version             print version information and exit
-```
+[docs](https://yupsh.github.io/docs.repl/)
