@@ -33,17 +33,24 @@ var spec = clix.Spec{
 	Synopsis: synopsis,
 	Build:    build,
 	Flags: []urf.Flag{
-		&urf.BoolFlag{Name: flagDecode, Aliases: []string{"d"}, Usage: "decode data"},
+		&urf.BoolFlag{
+			Name:    flagDecode,
+			Aliases: []string{"d"},
+			Usage:   "decode data",
+			Sources: urf.EnvVars("YUP_BASE64_DECODE"),
+		},
 		&urf.BoolFlag{
 			Name:    flagIgnoreGarbage,
 			Aliases: []string{"i"},
 			Usage:   "when decoding, ignore non-alphabet characters",
+			Sources: urf.EnvVars("YUP_BASE64_IGNORE_GARBAGE"),
 		},
 		&urf.IntFlag{
 			Name:    flagWrap,
 			Aliases: []string{"w"},
 			Value:   76,
 			Usage:   "wrap encoded lines after COLS character; use 0 to disable wrapping",
+			Sources: urf.EnvVars("YUP_BASE64_WRAP"),
 		},
 	},
 }
