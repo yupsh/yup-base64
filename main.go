@@ -32,27 +32,7 @@ var spec = clix.Spec{
 	Summary:  "base64 encode/decode data and print on the standard output",
 	Synopsis: synopsis,
 	Build:    build,
-	Flags: []urf.Flag{
-		&urf.BoolFlag{
-			Name:    flagDecode,
-			Aliases: []string{"d"},
-			Usage:   "decode data",
-			Sources: urf.EnvVars("YUP_BASE64_DECODE"),
-		},
-		&urf.BoolFlag{
-			Name:    flagIgnoreGarbage,
-			Aliases: []string{"i"},
-			Usage:   "when decoding, ignore non-alphabet characters",
-			Sources: urf.EnvVars("YUP_BASE64_IGNORE_GARBAGE"),
-		},
-		&urf.IntFlag{
-			Name:    flagWrap,
-			Aliases: []string{"w"},
-			Value:   76,
-			Usage:   "wrap encoded lines after COLS character; use 0 to disable wrapping",
-			Sources: urf.EnvVars("YUP_BASE64_WRAP"),
-		},
-	},
+	Flags:    flags(),
 }
 
 // build maps the invocation to base64's pipeline: a file-or-stdin source into
@@ -81,3 +61,38 @@ func options(c *urf.Command) []any {
 var runMain = clix.Main
 
 func main() { runMain(spec, version) }
+
+// flags builds a FRESH flag set on every call.
+//
+// urfave/cli flags carry mutable parse state: once a flag is supplied, its
+// hasBeenSet stays true for the life of the value. A package-level slice shared
+// across two parses therefore reports the second parse as having flags only the
+// FIRST one set, and IsSet stops meaning "the user asked for this".
+//
+// The shared gate runs every suite with -count=2 in one process, which is
+// exactly that shape — the first pass sets the flag, the second sees it already
+// set. Building fresh keeps one definition while giving each parse its own
+// state.
+func flags() []urf.Flag {
+	return []urf.Flag{
+		&urf.BoolFlag{
+			Name:    flagDecode,
+			Aliases: []string{"d"},
+			Usage:   "decode data",
+			Sources: urf.EnvVars("YUP_BASE64_DECODE"),
+		},
+		&urf.BoolFlag{
+			Name:    flagIgnoreGarbage,
+			Aliases: []string{"i"},
+			Usage:   "when decoding, ignore non-alphabet characters",
+			Sources: urf.EnvVars("YUP_BASE64_IGNORE_GARBAGE"),
+		},
+		&urf.IntFlag{
+			Name:    flagWrap,
+			Aliases: []string{"w"},
+			Value:   76,
+			Usage:   "wrap encoded lines after COLS character; use 0 to disable wrapping",
+			Sources: urf.EnvVars("YUP_BASE64_WRAP"),
+		},
+	}
+}

@@ -17,7 +17,7 @@ func parse(t *testing.T, args ...string) *urf.Command {
 	var got *urf.Command
 	app := &urf.Command{
 		Name:   name,
-		Flags:  spec.Flags,
+		Flags:  flags(),
 		Action: func(_ context.Context, c *urf.Command) error { got = c; return nil },
 	}
 	if err := app.Run(context.Background(), args); err != nil {
@@ -62,5 +62,25 @@ func Test_main(t *testing.T) {
 	main()
 	if gotName != name {
 		t.Fatalf("main used spec %q, want %s", gotName, name)
+	}
+}
+
+// TestFlagsAreFreshOnEveryCall names flags's claim: each call yields its own
+// values, so parse state cannot leak from one run to the next.
+//
+// urfave/cli flags carry mutable state — once supplied, a flag's hasBeenSet
+// stays true for the life of that value. Sharing one slice across parses made
+// IsSet report flags that only an EARLIER parse had set, which is how the
+// shared gate's -count=2 (two passes in one process) turned a passing suite
+// red: the first pass set the flag, the second saw it already set.
+func TestFlagsAreFreshOnEveryCall(t *testing.T) {
+	first, second := flags(), flags()
+	if len(first) != len(second) {
+		t.Fatalf("flag count differs between calls: %d vs %d", len(first), len(second))
+	}
+	for i := range first {
+		if first[i] == second[i] {
+			t.Fatalf("flag %d is the same value on both calls; parse state would leak between runs", i)
+		}
 	}
 }
